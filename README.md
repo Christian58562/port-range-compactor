@@ -19,3 +19,10 @@ The trade-off is strict input validation: every port must be an integer between 
 ## Awkward edge
 
 Two consecutive ports are **not** collapsed into a range. `[8000, 8001]` becomes `"8000,8001"`, not `"8000-8001"`, because the two forms are exactly the same length and the comma form is more conventional. Ranges of three or more ports are collapsed.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
